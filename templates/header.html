@@ -1,0 +1,95 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('welcome') }}">Civic Eye</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#myNavbar"
+      aria-controls="myNavbar"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="meDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            ME
+          </a>
+          <div class="dropdown-menu" aria-labelledby="meDropdown">
+            <a class="dropdown-item" href="{{ url_for('showMyIssue') }}">My Issue</a>
+            <a class="dropdown-item" href="{{ url_for('showMyComment') }}">My Comment</a>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('newIssue') }}">Create New Issue</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="nearbyDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Nearby
+          </a>
+          <div class="dropdown-menu" aria-labelledby="nearbyDropdown">
+            <a class="dropdown-item" href="{{ url_for('showNearbyIssueMap') }}">View Map</a>
+            <a class="dropdown-item" href="{{ url_for('showNearbyIssueList') }}">View List</a>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('newUser') }}">
+            <i class="fas fa-user"></i> Sign Up
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('logout') }}">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="flash mt-2">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul class="list-unstyled">
+    {% for message in messages %}
+    <li><strong>{{ message }}</strong></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+</div>
+
+<div class="error mt-2">
+  {% if error %}
+  <p class="text-danger"><strong>Error:</strong> {{ error }}</p>
+  {% endif %}
+</div>

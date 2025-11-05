@@ -1,0 +1,61 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+{% if Issue %}
+<script>
+  function initialize() {
+    // Read data from the map element's data-attributes to avoid embedding Jinja in JS
+    const mapEl = document.getElementById("map");
+    const issues = mapEl.dataset.issues ? JSON.parse(mapEl.dataset.issues) : [];
+    const currentLat = parseFloat(mapEl.dataset.currentLat) || 0;
+    const currentLng = parseFloat(mapEl.dataset.currentLng) || 0;
+
+    // Create map
+    const map = new google.maps.Map(mapEl, {
+      center: { lat: currentLat, lng: currentLng },
+      zoom: 13,
+      mapTypeId: "roadmap"
+    });
+
+    // Add markers for each issue
+    issues.forEach(issue => {
+      const marker = new google.maps.Marker({
+        position: { lat: issue.lat, lng: issue.lng },
+        map: map,
+        title: issue.title
+      });
+
+      const infoWindow = new google.maps.InfoWindow({
+        content: `<h5>${issue.title}</h5>`
+      });
+
+      // Show popup when marker is clicked
+      marker.addListener("click", () => {
+        infoWindow.open(map, marker);
+        map.setCenter(marker.getPosition());
+      });
+    });
+  }
+
+  // Load Google Maps API securely
+  function loadScript() {
+    const script = document.createElement("script");
+    script.src =
+      "https://maps.googleapis.com/maps/api/js?key=YOUR_NEW_API_KEY&callback=initialize";
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+
+  window.onload = loadScript;
+</script>
+<div id="map"
+     data-issues='{{ Issue | tojson | safe }}'
+     data-current-lat='{{ CurrentLat | tojson | safe }}'
+     data-current-lng='{{ CurrentLng | tojson | safe }}'
+     style="width: 100%; height: 500px;"></div>
+
+{% else %}
+<h1>No Nearby Issues :</h1>
+{% endif %}
+{% endblock %}

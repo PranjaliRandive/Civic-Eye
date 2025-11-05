@@ -1,0 +1,54 @@
+{% extends "main.html" %} {% block content %} {% include "header.html" %}
+<br />
+<h1>LIST OF ISSUES WITH LOGGED IN USER AS THE AUTHOR</h1>
+<div class="table-responsive">
+  <table class="table" align="right">
+    <thead>
+      <tr rowspan="2">
+        <th>I_Id:</th>
+        <th>Title</th>
+        <th colspan="2">Location</th>
+        <th colspan="2">Modify</th>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td></td>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th></th>
+        <th></th>
+      </tr>
+
+      <tr></tr>
+    </thead>
+    <tbody>
+      {% for i in Issue %}
+      <tr>
+        <td>
+          <a href="{{url_for('showDetailedIssue', I_Id = i.id)}}"> {{i.id}}</a>
+        </td>
+        <td>
+          <a href="{{url_for('showDetailedIssue', I_Id = i.id)}}">
+            {{i.title}}</a
+          >
+        </td>
+        <td>
+          <a href="{{url_for('showDetailedIssue', I_Id = i.id)}}">
+            {{i.lat|round(3, 'floor')}}</a
+          >
+        </td>
+        <td>
+          <a href="{{url_for('showDetailedIssue', I_Id = i.id)}}">
+            {{i.lng|round(3, 'floor')}}</a
+          >
+        </td>
+        <td><a href="{{url_for('editIssue', I_Id=i.id)}}">Edit</a></td>
+        <td><a href="{{url_for('deleteIssue', I_Id=i.id)}}">Delete</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% endblock %}
+</div>

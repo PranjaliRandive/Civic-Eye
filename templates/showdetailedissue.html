@@ -1,0 +1,115 @@
+{% extends "main.html" %} {% block content %} {% include "header.html" %}
+
+<div class="container mt-4">
+  <h3>Issue {{ Issue.id }}: {{ Issue.title }}</h3>
+
+  <!-- Google Map -->
+  <div
+    id="map"
+    class="rounded"
+    style="width: 100%; height: 300px; margin-top: 10px"
+  ></div>
+  <br />
+
+  <!-- Description -->
+  <b>Description:</b><br />
+  <textarea readonly rows="4" class="form-control">{{ Issue.content }}</textarea
+  ><br />
+
+  <!-- Author -->
+  <b>Author:</b><br />
+  <label>{{ Author }}</label><br />
+
+  <!-- Likes and Dislikes -->
+  <b>Likes:</b> <span>{{ like }}</span>
+  &emsp;&emsp;&emsp;
+  <b>Dislikes:</b> <span>{{ dislike }}</span><br /><br />
+
+  <!-- Other Info -->
+  <b>Type:</b> <span>{{ Issue.type }}</span><br />
+  <b>Anonymous:</b> <span>{{ Issue.anonFlag }}</span><br /><br />
+
+  <!-- Action Buttons -->
+  <a
+    href="{{ url_for('editIssue', I_Id=Issue.id) }}"
+    class="btn btn-warning btn-sm"
+  >
+    <i class="bi bi-pencil-square"></i> Edit
+  </a>
+  <a
+    href="{{ url_for('deleteIssue', I_Id=Issue.id) }}"
+    class="btn btn-danger btn-sm"
+  >
+    <i class="bi bi-trash"></i> Delete
+  </a>
+
+  <hr />
+
+  <!-- Comments Section -->
+  <b>Comments:</b><br />
+  {% for c in Comment %}
+  <div class="border rounded p-2 mb-2">
+    {{ c.content }}
+    <div class="mt-1">
+      <a
+        href="{{ url_for('editComment', C_Id=Issue.id, C_SqNo=c.sqNo) }}"
+        class="btn btn-outline-primary btn-sm"
+        >Edit</a
+      >
+      <a
+        href="{{ url_for('deleteComment', C_Id=Issue.id, C_SqNo=c.sqNo) }}"
+        class="btn btn-outline-danger btn-sm"
+        >Delete</a
+      >
+    </div>
+  </div>
+  {% else %}
+  <p>No comments yet.</p>
+  {% endfor %}
+
+  <a
+    href="{{ url_for('newComment', I_Id=Issue.id) }}"
+    class="btn btn-success mt-2"
+  >
+    <i class="bi bi-chat-dots"></i> Add Comment
+  </a>
+</div>
+
+<!-- Bootstrap 5 Icons -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+  rel="stylesheet"
+/>
+
+<!-- Safely pass Python data to JS -->
+<script id="issue-data" type="application/json">
+  {{ IssueJSON | tojson }}
+</script>
+
+<!-- Google Maps API (latest) -->
+<script
+  async
+  src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initialize"
+></script>
+
+<script>
+  function initialize() {
+    const issue = JSON.parse(document.getElementById("issue-data").textContent);
+    const lat = issue.lat || 0;
+    const lng = issue.lng || 0;
+
+    const map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat, lng },
+      zoom: 14,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+    });
+
+    new google.maps.Marker({
+      position: { lat, lng },
+      map: map,
+      title: issue.title || "Issue Location",
+    });
+  }
+</script>
+
+{% endblock %}

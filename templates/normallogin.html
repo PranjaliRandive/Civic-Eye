@@ -1,0 +1,32 @@
+{% extends "main.html" %} {% block content %} {% include "headerlogin.html" %}
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<h1>Please login</h1>
+<br />
+<form action="" method="post">
+  <input
+    type="text"
+    placeholder="Username"
+    name="username"
+    value="{{request.form.username }}"
+  />
+  <input
+    type="password"
+    placeholder="Password"
+    name="password"
+    value="{{request.form.password }}"
+  />
+  <input class="btn btn-default" type="submit" value="Login" />
+</form>
+<br />
+<!-- GOOGLE PLUS SIGN IN BUTTON-->
+
+<a href="{{ url_for('glogin') }}" class="btn btn-outline-primary">
+  Sign in with Google
+</a>
+
+<!--END GOOGLE PLUS SIGN IN BUTTON -->
+<div id="result"></div>
+
+{% endblock %}
